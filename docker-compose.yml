@@ -1,0 +1,16 @@
+version: '2'
+services:
+  app:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    command: gradle linuxTest 
+    volumes_from:
+     - konan
+
+  konan:
+    image: centos:7
+    volumes:
+      - ~/.konan:/root/.konan:rw
