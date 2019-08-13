@@ -4,7 +4,7 @@ An early-stage Kotlin port of [LogicKit](https://github.com/kyouko-taiga/LogicKi
 
 ## Run the tests
 
-`docker-compose run --rm app gradle --rerun-tasks allTest`
+`docker-compose run --rm app ./gradlew --rerun-tasks allTest`
 
 # Acknowledgements
 

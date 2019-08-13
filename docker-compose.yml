@@ -8,9 +8,11 @@ services:
       - .:/app
     command: gradle linuxTest 
     volumes_from:
-     - konan
+     - caches
 
-  konan:
+  caches:
     image: centos:7
     volumes:
+      - ~/.gradle:/home/gradle/.gradle:rw
       - ~/.konan:/root/.konan:rw
+
