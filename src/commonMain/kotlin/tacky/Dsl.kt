@@ -5,7 +5,11 @@ package tacky
 import kotlin.collections.List
 import kotlin.properties.Delegates
 
+@DslMarker
+annotation class TermDslMarker
+
 fun conjunction(block: ConjunctionDslBuilder.() -> Unit): Term.Conjunction = ConjunctionDslBuilder().apply(block).build()
+@TermDslMarker
 class ConjunctionDslBuilder() {
     var lhs: Term by Delegates.notNull()
 
@@ -19,6 +23,7 @@ class ConjunctionDslBuilder() {
 }
 
 fun disjunction(block: DisjunctionDslBuilder.() -> Unit): Term.Disjunction = DisjunctionDslBuilder().apply(block).build()
+@TermDslMarker
 class DisjunctionDslBuilder() {
     var lhs: Term by Delegates.notNull()
 
@@ -32,6 +37,7 @@ class DisjunctionDslBuilder() {
 }
 
 internal fun ruleInternal(block: RuleInternalDslBuilder.() -> Unit): Term = RuleInternalDslBuilder().apply(block).build()
+@TermDslMarker
 class RuleInternalDslBuilder() {
     var name: String by Delegates.notNull()
 
@@ -60,6 +66,7 @@ class RuleInternalDslBuilder() {
 }
 
 internal fun termInternal(block: TermInternalDslBuilder.() -> Unit): Term = TermInternalDslBuilder().apply(block).build()
+@TermDslMarker
 class TermInternalDslBuilder() {
     var name: String by Delegates.notNull()
 
@@ -88,6 +95,7 @@ fun rule(block: RuleInternalDslBuilder.() -> Unit): Term = ruleInternal(block)
 fun lit(block: ValDslBuilder.() -> Unit): Term.Val = `val`(block)
 
 fun `val`(block: ValDslBuilder.() -> Unit): Term.Val = ValDslBuilder().apply(block).build()
+@TermDslMarker
 class ValDslBuilder() {
     var value: Any by Delegates.notNull()
 
@@ -97,6 +105,7 @@ class ValDslBuilder() {
 }
 
 fun `var`(block: VarDslBuilder.() -> Unit): Term.Var = VarDslBuilder().apply(block).build()
+@TermDslMarker
 class VarDslBuilder() {
     var value: String by Delegates.notNull()
 
@@ -107,6 +116,7 @@ class VarDslBuilder() {
 
 
 fun knowledgeBase(block: KnowledgeBaseDslBuilder.() -> Unit): KnowledgeBase = KnowledgeBaseDslBuilder().apply(block).build()
+@TermDslMarker
 class KnowledgeBaseDslBuilder() {
     var knowledge: List<Term> by Delegates.notNull()
 
