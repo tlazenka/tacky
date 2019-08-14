@@ -1,18 +1,16 @@
 package tacky
 
 /// Base class for realizers.
-interface RealizerBase {
-    fun next() : Map<String, Term>?
-}
+interface RealizerBase: SourcedIterator<Map<String, Term>>
 
 /// Realizer that alternatively pulls results from multiple sub-realizers.
 class RealizerAlternator(realizers: kotlin.collections.List<Realizer>) : RealizerBase {
     private var index = 0
     private var realizers = realizers.toMutableList()
 
-    override fun next() : Map<String, Term>? {
+    override fun poll() : Map<String, Term>? {
         while (realizers.isNotEmpty()) {
-            val result = realizers[index].next()
+            val result = realizers[index].poll()
             if (result == null) {
                 realizers.removeAt(index)
                 if (realizers.isNotEmpty()) {
@@ -25,6 +23,8 @@ class RealizerAlternator(realizers: kotlin.collections.List<Realizer>) : Realize
         }
         return null
     }
+
+    override var nextElement: Map<String, Term>? = null
 
 }
 
@@ -54,11 +54,11 @@ class Realizer(
         }
     }
 
-    override fun next() : Map<String, Term>? {
+    override fun poll() : Map<String, Term>? {
         // If we have a subrealizer running, pull its results first.
         val sub = subRealizer
         if (sub != null) {
-            val result = sub.next()
+            val result = sub.poll()
             if (result != null) {
                 return result.merged(other = parentBindings)
             } else {
@@ -78,7 +78,7 @@ class Realizer(
                 if (goals.size > 1) {
                     val subGoals = goals.drop(1).map { nodeResult.deepWalk(it) }
                     subRealizer = Realizer(goals = subGoals, knowledge = knowledge, parentBindings = nodeResult, logger = logger)
-                    val branchResult = subRealizer!!.next()
+                    val branchResult = subRealizer!!.poll()
                     if (branchResult != null) {
                         return branchResult.merged(other = parentBindings)
                     }
@@ -95,7 +95,7 @@ class Realizer(
                 if (goals.size > 1) {
                     val subGoals = goals.drop(1)
                     subRealizer = Realizer(goals = subGoals, knowledge = knowledge, logger = logger)
-                    val branchResult = subRealizer!!.next()
+                    val branchResult = subRealizer!!.poll()
                     if (branchResult != null) {
                         return branchResult.merged(parentBindings)
                     }
@@ -107,7 +107,7 @@ class Realizer(
                     if (goals.size > 1) {
                         val subGoals = goals.drop(1).map { nodeResult.deepWalk(it) }
                         subRealizer = Realizer(goals = subGoals, knowledge = knowledge, parentBindings = nodeResult, logger = logger)
-                        val branchResult = subRealizer!!.next()
+                        val branchResult = subRealizer!!.poll()
                         if (branchResult != null) {
                             return branchResult.merged(parentBindings)
                         }
@@ -139,7 +139,7 @@ class Realizer(
                     val subKnowledge = knowledge.renaming(clause.variables.toSet())
                     val subRealizers = ruleGoals.map { Realizer(goals = it, knowledge = subKnowledge, parentBindings = nodeResult, logger = logger) }
                     subRealizer = if (subRealizers.size > 1) RealizerAlternator(realizers = subRealizers) else subRealizers[0]
-                    val branchResult = subRealizer!!.next()
+                    val branchResult = subRealizer!!.poll()
                     if (branchResult != null) {
                         // Note the `branchResult` already contains the bindings of `nodeResult`, as the these
                         // will have been merged by sub-realizer.
@@ -153,6 +153,8 @@ class Realizer(
         }
         return null
     }
+
+    override var nextElement: Map<String, Term>? = null
 
     fun unify(goal: Term, fact: Term, bindings: BindingMap = mapOf()) : BindingMap? {
         // Shallow-walk the terms to unify.

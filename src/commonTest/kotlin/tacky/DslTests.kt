@@ -491,5 +491,158 @@ class DslTests {
         assertNotNull(answers[1]["nodes"])
     }
 
+    @Test
+    fun testDslEquality() {
+        val x0: Term = `var` { value = "x" }
+        val y0: Term = `var` { value = "y" }
+        val z0: Term = `var` { value = "z" }
+        val w0: Term = `var` { value = "w" }
+        val kb0 = knowledgeBase {
+            knowledge {
+                +fact {
+                    name = "link"
+                    arguments {
+                        +fact {
+                            name = "0"
+                        }
+                        +fact {
+                            name = "1"
+                        }
+                    }
+                }
+                +fact {
+                    name = "link"
+                    arguments {
+                        +fact {
+                            name = "1"
+                        }
+                        +fact {
+                            name = "2"
+                        }
+                    }
+                }
+                +fact {
+                    name = "link"
+                    arguments {
+                        +fact {
+                            name = "2"
+                        }
+                        +fact {
+                            name = "4"
+                        }
+                    }
+                }
+                +fact {
+                    name = "link"
+                    arguments {
+                        +fact {
+                            name = "1"
+                        }
+                        +fact {
+                            name = "3"
+                        }
+                    }
+                }
+                +fact {
+                    name = "link"
+                    arguments {
+                        +fact {
+                            name = "3"
+                        }
+                        +fact {
+                            name = "4"
+                        }
+                    }
+                }
+                +rule {
+                    name = "path"
+                    arguments {
+                        +x0
+                        +y0
+                        +fact {
+                            name = "c"
+                            arguments {
+                                +x0
+                                +fact {
+                                    name = "c"
+                                    arguments {
+                                        +y0
+                                        +fact {
+                                            name = "nil"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    body = fact {
+                        name = "link"
+                        arguments {
+                            +x0
+                            +y0
+                        }
+                    }
+                }
+                +rule {
+                    name = "path"
+                    arguments {
+                        +x0
+                        +y0
+                        +fact {
+                            name = "c"
+                            arguments {
+                                +x0
+                                +w0
+                            }
+                        }
+                    }
+                    body = fact {
+                        name = "link"
+                        arguments {
+                            +x0
+                            +z0
+                        }
+                    } and fact {
+                        name = "path"
+                        arguments {
+                            +z0
+                            +y0
+                            +w0
+                        }
+                    }
+                }
+            }
+        }
+
+        val literals0 = kb0.literals
+        val predicates0 = kb0.predicates
+
+
+        val x1: Term = Term.Var("x")
+        val y1: Term = Term.Var("y")
+        val z1: Term = Term.Var("z")
+        val w1: Term = Term.Var("w")
+        val kb1 = KnowledgeBase(listOf(
+            Term.Fact("link", "0".asTerm, "1".asTerm),
+            Term.Fact("link", "1".asTerm, "2".asTerm),
+            Term.Fact("link", "2".asTerm, "4".asTerm),
+            Term.Fact("link", "1".asTerm, "3".asTerm),
+            Term.Fact("link", "3".asTerm, "4".asTerm),
+            Term.Rule("path", x1, y1, Term.Fact("c", x1, Term.Fact("c", y1, "nil".asTerm))) {
+                Term.Fact("link", x1, y1)
+            },
+            Term.Rule("path", x1, y1, Term.Fact("c", x1, w1)) {
+                Term.Fact("link", x1, z1) and Term.Fact("path", z1, y1, w1)
+            }
+        ))
+
+
+        val literals1 = kb1.literals
+        val predicates1 = kb1.predicates
+
+        assertEquals(literals0, literals1)
+        assertEquals(predicates0, predicates1)
+    }
+
 
 }

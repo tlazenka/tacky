@@ -26,8 +26,7 @@ class BuiltinsTests {
 
         val list = List.from(elements = listOf("1".asTerm, "2".asTerm, "3".asTerm))
         query = List.contains(list = list, element = "0".asTerm)
-        binding = kb.ask(query).next()
-        assertNull(binding)
+        assertFalse(kb.ask(query).hasNext())
         query = List.contains(list = list, element = "1".asTerm)
         binding = kb.ask(query).next()
         assertNotNull(binding)
@@ -150,8 +149,7 @@ class BuiltinsTests {
 
         query = Nat.sub(Nat.from(2), Nat.from(5), res)
         // 2 - 5 = ?
-        binding = kb.ask(query).next()
-        assertNull(binding)
+        assertFalse(kb.ask(query).hasNext())
         query = Nat.sub(Nat.from(5), Nat.from(2), res)
         // 5 - 2 = ?
         binding = kb.ask(query).next()
@@ -202,8 +200,7 @@ class BuiltinsTests {
 
         query = Nat.div(Nat.from(2), Nat.from(0), res)
         // 2 / 0 = ?
-        binding = kb.ask(query).next()
-        assertNull(binding)
+        assertFalse(kb.ask(query).hasNext())
         query = Nat.div(Nat.from(2), Nat.from(6), res)
         // 2 / 6 = ?
         binding = kb.ask(query).next()
@@ -240,8 +237,7 @@ class BuiltinsTests {
 
         query = Nat.mod(Nat.from(2), Nat.from(0), res)
         // 2 % 0 = ?
-        binding = kb.ask(query).next()
-        assertNull(binding)
+        assertFalse(kb.ask(query).hasNext())
         query = Nat.mod(Nat.from(2), Nat.from(6), res)
         // 2 % 6 = ?
         binding = kb.ask(query).next()
