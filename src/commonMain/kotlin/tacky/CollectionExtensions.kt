@@ -20,3 +20,26 @@ data class SequenceConcatenation<S>(private val first: Collection<S>, private va
         return iter2.next()
     }
 }
+
+interface SourcedIterator<T>: Iterator<T> {
+    fun poll(): T?
+
+    var nextElement: T?
+
+    override fun hasNext(): Boolean {
+        if (nextElement == null) {
+            nextElement = poll()
+        }
+        return nextElement != null
+    }
+
+    override fun next(): T {
+        if (!(hasNext())) {
+            throw NoSuchElementException()
+        }
+        val result = nextElement
+        nextElement = null
+        return result!!
+    }
+
+}
