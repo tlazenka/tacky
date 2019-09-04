@@ -1,6 +1,5 @@
 package tacky
 
-import tacky.Platform.assert
 import kotlin.test.*
 
 class BuiltinsTests {
@@ -59,13 +58,13 @@ class BuiltinsTests {
 
         query = Nat.greater(Nat.from(2), Nat.from(2))
         // 2 > 2
-        assert(kb.ask(query).toList().isEmpty())
+        assertTrue(kb.ask(query).toList().isEmpty())
         query = Nat.greater(Nat.from(5), Nat.from(2))
         // 5 > 2
         assertEquals(kb.ask(query).toList().size, 1)
         query = Nat.greater(Nat.from(2), Nat.from(5))
         // 2 > 5
-        assert(kb.ask(query).toList().isEmpty())
+        assertTrue(kb.ask(query).toList().isEmpty())
     }
 
     @Test
@@ -81,7 +80,7 @@ class BuiltinsTests {
         assertEquals(kb.ask(query).toList().size, 1)
         query = Nat.greaterOrEqual(Nat.from(2), Nat.from(5))
         // 2 >= 5
-        assert(kb.ask(query).toList().isEmpty())
+        assertTrue(kb.ask(query).toList().isEmpty())
     }
 
     @Test
@@ -91,10 +90,10 @@ class BuiltinsTests {
 
         query = Nat.smaller(Nat.from(2), Nat.from(2))
         // 2 < 2
-        assert(kb.ask(query).toList().isEmpty())
+        assertTrue(kb.ask(query).toList().isEmpty())
         query = Nat.smaller(Nat.from(5), Nat.from(2))
         // 5 < 2
-        assert(kb.ask(query).toList().isEmpty())
+        assertTrue(kb.ask(query).toList().isEmpty())
         query = Nat.smaller(Nat.from(2), Nat.from(5))
         // 2 < 5
         assertEquals(kb.ask(query).toList().size, 1)
@@ -110,7 +109,7 @@ class BuiltinsTests {
         assertEquals(kb.ask(query).toList().size, 1)
         query = Nat.smallerOrEqual(Nat.from(5), Nat.from(2))
         // 5 <= 2
-        assert(kb.ask(query).toList().isEmpty())
+        assertTrue(kb.ask(query).toList().isEmpty())
         query = Nat.smallerOrEqual(Nat.from(2), Nat.from(5))
         // 2 <= 5
         assertEquals(kb.ask(query).toList().size, 1)
