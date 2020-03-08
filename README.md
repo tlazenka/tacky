@@ -1,6 +1,6 @@
 # Tacky
 
-The beginnings of a Kotlin conversion of [LogicKit](https://github.com/kyouko-taiga/LogicKit). The DSL is a WIP.
+Exploring Kotlin DSLs via a port of [LogicKit](https://github.com/kyouko-taiga/LogicKit).
 
 ## Run the tests
 
