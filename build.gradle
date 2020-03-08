@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.kotlin.multiplatform' version '1.3.41'
+    id 'org.jetbrains.kotlin.multiplatform' version '1.3.70'
 }
 repositories {
     mavenCentral()
@@ -27,7 +27,11 @@ tasks.withType(Test) {
 kotlin {
     jvm()
     js {
+        // TODO: add Headless Chrome to Dockerfile
         browser {
+            testTask {
+                enabled = false
+            }
         }
         nodejs {
         }
