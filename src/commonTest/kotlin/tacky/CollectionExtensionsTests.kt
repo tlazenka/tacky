@@ -4,7 +4,7 @@ import kotlin.test.*
 
 class CollectionExtensionsTests {
 
-    fun newSourcedIterator(): SourcedIterator<Int> = object: SourcedIterator<Int> {
+    fun newSourcedIterator(): SourcedIterator<Int> = object : SourcedIterator<Int> {
         val list = arrayOf(1, 2, 3)
         var currentIndex = 0
         override var nextElement: Int? = null
@@ -14,7 +14,6 @@ class CollectionExtensionsTests {
             currentIndex++
             return result
         }
-
     }
 
     @Test
@@ -45,6 +44,5 @@ class CollectionExtensionsTests {
         val sourcedIterator1 = newSourcedIterator()
         val result1 = sourcedIterator1.asSequence().toList()
         assertTrue(result1.toTypedArray().contentEquals(arrayOf(1, 2, 3)))
-
     }
 }

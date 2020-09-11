@@ -69,7 +69,7 @@ sealed class Term {
             }
         }
 
-    fun renaming(variables: Set<String>) : Term {
+    fun renaming(variables: Set<String>): Term {
         return when {
             ((this is Var) && (variables.contains(value))) -> {
                 Var(value + "'")
@@ -84,7 +84,7 @@ sealed class Term {
         }
     }
 
-    fun <T: Any> lit(value: T) : Term = Val(value)
+    fun <T : Any> lit(value: T): Term = Val(value)
 
     inline fun <reified T> extractValue(): T? = when {
         this !is Val -> null
@@ -92,7 +92,7 @@ sealed class Term {
         else -> value
     }
 
-    /////
+    // ///
     object Fact {
         operator fun invoke(name: String, vararg arguments: Term): Term = TermInternal(name = name, arguments = arguments.toList())
     }
@@ -111,9 +111,9 @@ sealed class Term {
         return TermInternal(name = name, arguments = terms.toList())
     }
 
-    /////
+    // ///
 
-    infix fun implies(rhs: Term) : Term {
+    infix fun implies(rhs: Term): Term {
         val lhs = this
         if (rhs !is TermInternal) {
             throw IllegalArgumentException("Cannot use '${this}' as a rule head.")
@@ -123,21 +123,21 @@ sealed class Term {
         return RuleInternal(name = name, arguments = args, body = lhs)
     }
 
-    infix fun rightTack(rhs: Term) : Term {
+    infix fun rightTack(rhs: Term): Term {
         val lhs = this as? TermInternal ?: throw RuntimeException("Cannot use '${this}' as a rule head.")
         val name = lhs.name
         val args = lhs.arguments
         return RuleInternal(name = name, arguments = args, body = rhs)
     }
 
-    /////
-    infix fun and(rhs: Term) : Term = Conjunction(this, rhs)
+    // ///
+    infix fun and(rhs: Term): Term = Conjunction(this, rhs)
 
-    /////
-    infix fun or(rhs: Term) : Term = Disjunction(this, rhs)
+    // ///
+    infix fun or(rhs: Term): Term = Disjunction(this, rhs)
 
-    /////
-    infix fun unification(rhs: Term) : Term = TermInternal(name = "lk.~=~", arguments = listOf(this, rhs))
+    // ///
+    infix fun unification(rhs: Term): Term = TermInternal(name = "lk.~=~", arguments = listOf(this, rhs))
 
     override fun toString(): String {
         return when (this) {
@@ -145,11 +145,13 @@ sealed class Term {
             is Val -> "${value}"
             is TermInternal -> if (arguments.isEmpty()) name else "${name}[${arguments.joinToString(
                 separator = ", ",
-                transform = { "${it}" })}]"
+                transform = { "${it}" }
+            )}]"
             is RuleInternal -> {
                 val head = if (arguments.isEmpty()) name else "${name}[${arguments.joinToString(
                     separator = ", ",
-                    transform = { "${it}" })}]"
+                    transform = { "${it}" }
+                )}]"
                 "(${head} ⊢ ${body})"
             }
             is Conjunction -> "(${lhs} ∧ ${rhs})"
@@ -159,4 +161,3 @@ sealed class Term {
 }
 
 val String.asTerm get() = Term.Fact(this)
-

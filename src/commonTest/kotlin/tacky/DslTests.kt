@@ -126,7 +126,6 @@ class DslTests {
                         }
                     }
                 }
-
             }
         }
         val answers0 = kb.ask(
@@ -143,7 +142,7 @@ class DslTests {
             }
         ).toList()
         assertEquals(answers0.size, 1)
-        assertEquals(answers0[0], mapOf("x"  to Term.Lit(1)))
+        assertEquals(answers0[0], mapOf("x" to Term.Lit(1)))
         val answers1 = kb.ask(
             fact {
                 name = "<"
@@ -201,7 +200,8 @@ class DslTests {
                         name = "mia"
                     }
                 }
-            }).toList()
+            }
+        ).toList()
         assertEquals(answers0.size, 1)
         assertEquals(answers0[0], mapOf())
 
@@ -213,7 +213,8 @@ class DslTests {
                         value = "who"
                     }
                 }
-            }).toList()
+            }
+        ).toList()
         assertEquals(answers1.size, 1)
         assertEquals(answers1[0], mapOf("who" to "mia".asTerm))
     }
@@ -258,8 +259,6 @@ class DslTests {
                         }
                     }
                 }
-
-
             }
         }
 
@@ -277,14 +276,14 @@ class DslTests {
         val z: Term = `var` { value = "z" }
         val zero: Term = fact { name = "zero" }
 
-        fun succ(x: Term) : Term = fact {
+        fun succ(x: Term): Term = fact {
             name = "succ"
             arguments {
                 +x
             }
         }
 
-        fun nat(value: Int) : Term {
+        fun nat(value: Int): Term {
             return if (value == 0) {
                 zero
             } else {
@@ -344,7 +343,6 @@ class DslTests {
         assertNotNull(answer)
         assertEquals(answer["result"], nat(value = 2))
     }
-
 
     @Test
     fun testBacktrackingDsl() {
@@ -617,25 +615,25 @@ class DslTests {
         val literals0 = kb0.literals
         val predicates0 = kb0.predicates
 
-
         val x1: Term = Term.Var("x")
         val y1: Term = Term.Var("y")
         val z1: Term = Term.Var("z")
         val w1: Term = Term.Var("w")
-        val kb1 = KnowledgeBase(listOf(
-            Term.Fact("link", "0".asTerm, "1".asTerm),
-            Term.Fact("link", "1".asTerm, "2".asTerm),
-            Term.Fact("link", "2".asTerm, "4".asTerm),
-            Term.Fact("link", "1".asTerm, "3".asTerm),
-            Term.Fact("link", "3".asTerm, "4".asTerm),
-            Term.Rule("path", x1, y1, Term.Fact("c", x1, Term.Fact("c", y1, "nil".asTerm))) {
-                Term.Fact("link", x1, y1)
-            },
-            Term.Rule("path", x1, y1, Term.Fact("c", x1, w1)) {
-                Term.Fact("link", x1, z1) and Term.Fact("path", z1, y1, w1)
-            }
-        ))
-
+        val kb1 = KnowledgeBase(
+            listOf(
+                Term.Fact("link", "0".asTerm, "1".asTerm),
+                Term.Fact("link", "1".asTerm, "2".asTerm),
+                Term.Fact("link", "2".asTerm, "4".asTerm),
+                Term.Fact("link", "1".asTerm, "3".asTerm),
+                Term.Fact("link", "3".asTerm, "4".asTerm),
+                Term.Rule("path", x1, y1, Term.Fact("c", x1, Term.Fact("c", y1, "nil".asTerm))) {
+                    Term.Fact("link", x1, y1)
+                },
+                Term.Rule("path", x1, y1, Term.Fact("c", x1, w1)) {
+                    Term.Fact("link", x1, z1) and Term.Fact("path", z1, y1, w1)
+                }
+            )
+        )
 
         val literals1 = kb1.literals
         val predicates1 = kb1.predicates
@@ -643,6 +641,4 @@ class DslTests {
         assertEquals(literals0, literals1)
         assertEquals(predicates0, predicates1)
     }
-
-
 }

@@ -6,66 +6,66 @@ object Nat {
 
     val zero: Term = Term.Lit("nat::0")
 
-    fun succ(n: Term) : Term {
+    fun succ(n: Term): Term {
         Platform.assert(isNat(n), "'${n}' is not a builtin natural number")
         return Term.Fact("nat::succ", n)
     }
 
     // MARK: Predicates
 
-    fun greater(lhs: Term, rhs: Term) : Term {
+    fun greater(lhs: Term, rhs: Term): Term {
         Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
         Platform.assert(isNat(rhs), "'${rhs}' is not a builtin natural number")
         return Term.Fact("nat::>", lhs, rhs)
     }
 
-    fun greaterOrEqual(lhs: Term, rhs: Term) : Term {
+    fun greaterOrEqual(lhs: Term, rhs: Term): Term {
         Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
         Platform.assert(isNat(rhs), "'${rhs}' is not a builtin natural number")
         return Term.Fact("nat::>=", lhs, rhs)
     }
 
-    fun smaller(lhs: Term, rhs: Term) : Term {
+    fun smaller(lhs: Term, rhs: Term): Term {
         Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
         Platform.assert(isNat(rhs), "'${rhs}' is not a builtin natural number")
         return Term.Fact("nat::<", lhs, rhs)
     }
 
-    fun smallerOrEqual(lhs: Term, rhs: Term) : Term {
+    fun smallerOrEqual(lhs: Term, rhs: Term): Term {
         Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
         Platform.assert(isNat(rhs), "'${rhs}' is not a builtin natural number")
         return Term.Fact("nat::<=", lhs, rhs)
     }
 
-    fun add(lhs: Term, rhs: Term, res: Term) : Term {
+    fun add(lhs: Term, rhs: Term, res: Term): Term {
         Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
         Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
         Platform.assert(isNat(res), "'${res}' is not a builtin natural number")
         return Term.Fact("nat::+", lhs, rhs, res)
     }
 
-    fun sub(lhs: Term, rhs: Term, res: Term) : Term {
+    fun sub(lhs: Term, rhs: Term, res: Term): Term {
         Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
         Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
         Platform.assert(isNat(res), "'${res}' is not a builtin natural number")
         return Term.Fact("nat::-", lhs, rhs, res)
     }
 
-    fun mul(lhs: Term, rhs: Term, res: Term) : Term {
+    fun mul(lhs: Term, rhs: Term, res: Term): Term {
         Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
         Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
         Platform.assert(isNat(res), "'${res}' is not a builtin natural number")
         return Term.Fact("nat::*", lhs, rhs, res)
     }
 
-    fun div(lhs: Term, rhs: Term, res: Term) : Term {
+    fun div(lhs: Term, rhs: Term, res: Term): Term {
         Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
         Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
         Platform.assert(isNat(res), "'${res}' is not a builtin natural number")
         return Term.Fact("nat::/", lhs, rhs, res)
     }
 
-    fun mod(lhs: Term, rhs: Term, res: Term) : Term {
+    fun mod(lhs: Term, rhs: Term, res: Term): Term {
         Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
         Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
         Platform.assert(isNat(res), "'${res}' is not a builtin natural number")
@@ -96,7 +96,8 @@ object Nat {
             Term.Fact("nat::<=", x, x),
             Term.Rule("nat::<=", x, y) {
                 smaller(x, y)
-            })
+            }
+        )
     }()
 
     val arithmeticAxioms: kotlin.collections.List<Term> = {
@@ -126,15 +127,16 @@ object Nat {
             },
             Term.Rule("nat::%", x, succ(y), z) {
                 div(x, succ(y), w) and mul(succ(y), w, v) and sub(x, v, z)
-            })
+            }
+        )
     }()
 
     // MARK: Helpers
 
-    fun from(i: Int) : Term =
+    fun from(i: Int): Term =
         if (i > 0) succ(from(i - 1)) else zero
 
-    fun asKotlinInt(t: Term) : Int? {
+    fun asKotlinInt(t: Term): Int? {
         return when {
             t == zero -> 0
             (t is Term.TermInternal) && (t.name == "nat::succ") -> {
@@ -148,7 +150,7 @@ object Nat {
         }
     }
 
-    fun isNat(t: Term) : Boolean {
+    fun isNat(t: Term): Boolean {
         return when {
             (t is Term.Var) || (t == zero) -> true
             (t is Term.TermInternal) && (t.name == "nat::succ") -> t.arguments.size == 1 && isNat(t.arguments[0])
@@ -163,7 +165,7 @@ object List {
 
     val empty: Term = Term.Lit("list::empty")
 
-    fun cons(head: Term, tail: Term) : Term {
+    fun cons(head: Term, tail: Term): Term {
         if (!isList(tail)) {
             throw IllegalArgumentException("'${tail}' is not a list")
         }
@@ -172,17 +174,17 @@ object List {
 
     // MARK: Predicates
 
-    fun count(list: Term, count: Term) : Term {
+    fun count(list: Term, count: Term): Term {
         Platform.assert(isList(list), "'${list}' is not a builtin list")
         return Term.Fact("list::count", list, count)
     }
 
-    fun contains(list: Term, element: Term) : Term {
+    fun contains(list: Term, element: Term): Term {
         Platform.assert(isList(list), "'${list}' is not a builtin list")
         return Term.Fact("list::contains", list, element)
     }
 
-    fun concat(lhs: Term, rhs: Term, res: Term) : Term {
+    fun concat(lhs: Term, rhs: Term, res: Term): Term {
         Platform.assert(isList(lhs), "'${lhs}' is not a builtin list")
         Platform.assert(isList(rhs), "'${rhs}' is not a builtin list")
         Platform.assert(isList(res), "'${res}' is not a builtin list")
@@ -234,10 +236,10 @@ object List {
 
     // MARK: Helpers
 
-    fun from(elements: Collection<Term>) : Term =
+    fun from(elements: Collection<Term>): Term =
         if (!elements.isEmpty()) cons(elements.firstOrNull()!!, from(elements = elements.drop(1))) else empty
 
-    fun isList(t: Term) : Boolean {
+    fun isList(t: Term): Boolean {
         return when {
             (t is Term.Var) || (t == empty) -> true
             (t is Term.TermInternal) && (t.name == "list::cons") -> t.arguments.size == 2 && isList(t.arguments[1])
@@ -245,4 +247,3 @@ object List {
         }
     }
 }
-

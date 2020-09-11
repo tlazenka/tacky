@@ -6,11 +6,13 @@ class LogicKitTests {
 
     @Test
     fun testConstantFacts() {
-        val kb = KnowledgeBase(listOf(
-            Term.Fact("<", Term.Lit(0), Term.Lit(1)),
-            Term.Fact("<", Term.Lit(1), Term.Lit(2)),
-            Term.Fact("<", Term.Lit(2), Term.Lit(3))
-        ))
+        val kb = KnowledgeBase(
+            listOf(
+                Term.Fact("<", Term.Lit(0), Term.Lit(1)),
+                Term.Fact("<", Term.Lit(1), Term.Lit(2)),
+                Term.Fact("<", Term.Lit(2), Term.Lit(3))
+            )
+        )
         val answers0 = kb.ask(Term.Fact("<", Term.Lit(0), Term.Lit(1))).toList()
         assertEquals(answers0.size, 1)
         assertEquals(answers0[0], mapOf())
@@ -33,14 +35,16 @@ class LogicKitTests {
 
     @Test
     fun testFactsWithVariables() {
-        val kb = KnowledgeBase(listOf(
-            Term.Fact("<", Term.Lit(0), Term.Lit(1)),
-            Term.Fact("<", Term.Lit(1), Term.Lit(2)),
-            Term.Fact("<", Term.Lit(2), Term.Lit(3))
-        ))
+        val kb = KnowledgeBase(
+            listOf(
+                Term.Fact("<", Term.Lit(0), Term.Lit(1)),
+                Term.Fact("<", Term.Lit(1), Term.Lit(2)),
+                Term.Fact("<", Term.Lit(2), Term.Lit(3))
+            )
+        )
         val answers0 = kb.ask(Term.Fact("<", Term.Lit(0), Term.Var("x"))).toList()
         assertEquals(answers0.size, 1)
-        assertEquals(answers0[0], mapOf("x"  to Term.Lit(1)))
+        assertEquals(answers0[0], mapOf("x" to Term.Lit(1)))
         val answers1 = kb.ask(Term.Fact("<", Term.Var("x"), Term.Var("y"))).toList()
         assertEquals(answers1.size, 3)
         assertTrue(answers1.any { it["x"] == Term.Lit(0) && it["y"] == Term.Lit(1) })
@@ -50,12 +54,14 @@ class LogicKitTests {
 
     @Test
     fun testSimpleDeductions() {
-        val kb = KnowledgeBase(listOf(
-            Term.Fact("play", "mia".asTerm),
-            Term.Rule("happy", "mia".asTerm) {
-                Term.Fact("play", "mia".asTerm)
-            }
-        ))
+        val kb = KnowledgeBase(
+            listOf(
+                Term.Fact("play", "mia".asTerm),
+                Term.Rule("happy", "mia".asTerm) {
+                    Term.Fact("play", "mia".asTerm)
+                }
+            )
+        )
         val answers0 = kb.ask(Term.Fact("happy", "mia".asTerm)).toList()
         assertEquals(answers0.size, 1)
         assertEquals(answers0[0], mapOf())
@@ -67,13 +73,15 @@ class LogicKitTests {
     @Test
     fun testDisjunction() {
         val x: Term = Term.Var("x")
-        val kb = KnowledgeBase(listOf(
-            Term.Fact("hot", "fire".asTerm),
-            Term.Fact("cold", "ice".asTerm),
-            Term.Rule("painful", x) {
-                Term.Fact("hot", x) or Term.Fact("cold", x)
-            }
-        ))
+        val kb = KnowledgeBase(
+            listOf(
+                Term.Fact("hot", "fire".asTerm),
+                Term.Fact("cold", "ice".asTerm),
+                Term.Rule("painful", x) {
+                    Term.Fact("hot", x) or Term.Fact("cold", x)
+                }
+            )
+        )
         val answers = kb.ask(Term.Fact("painful", x)).toList()
         assertEquals(answers.size, 2)
         val results = setOf(answers.mapNotNull { it["x"] }).flatten()
@@ -88,23 +96,25 @@ class LogicKitTests {
         val z: Term = Term.Var("z")
         val zero: Term = "zero".asTerm
 
-        fun succ(x: Term) : Term =
+        fun succ(x: Term): Term =
             Term.Fact("succ", x)
 
-        fun nat(value: Int) : Term {
+        fun nat(value: Int): Term {
             return if (value == 0) {
                 zero
             } else {
                 succ(nat(value = value - 1))
             }
         }
-        val kb = KnowledgeBase(listOf(
-            Term.Fact("diff", zero, x, x),
-            Term.Fact("diff", x, zero, x),
-            Term.Rule("diff", succ(x), succ(y), z) {
-                Term.Fact("diff", x, y, z)
-            }
-        ))
+        val kb = KnowledgeBase(
+            listOf(
+                Term.Fact("diff", zero, x, x),
+                Term.Fact("diff", x, zero, x),
+                Term.Rule("diff", succ(x), succ(y), z) {
+                    Term.Fact("diff", x, y, z)
+                }
+            )
+        )
         val query: Term = Term.Fact("diff", nat(value = 2), nat(value = 4), Term.Var("result"))
         val answers = kb.ask(query)
         val answer = answers.next()
@@ -112,26 +122,27 @@ class LogicKitTests {
         assertEquals(answer["result"], nat(value = 2))
     }
 
-
     @Test
     fun testBacktracking() {
         val x: Term = Term.Var("x")
         val y: Term = Term.Var("y")
         val z: Term = Term.Var("z")
         val w: Term = Term.Var("w")
-        val kb = KnowledgeBase(listOf(
-            Term.Fact("link", "0".asTerm, "1".asTerm),
-            Term.Fact("link", "1".asTerm, "2".asTerm),
-            Term.Fact("link", "2".asTerm, "4".asTerm),
-            Term.Fact("link", "1".asTerm, "3".asTerm),
-            Term.Fact("link", "3".asTerm, "4".asTerm),
-            Term.Rule("path", x, y, Term.Fact("c", x, Term.Fact("c", y, "nil".asTerm))) {
-                Term.Fact("link", x, y)
-            },
-            Term.Rule("path", x, y, Term.Fact("c", x, w)) {
-                Term.Fact("link", x, z) and Term.Fact("path", z, y, w)
-            }
-        ))
+        val kb = KnowledgeBase(
+            listOf(
+                Term.Fact("link", "0".asTerm, "1".asTerm),
+                Term.Fact("link", "1".asTerm, "2".asTerm),
+                Term.Fact("link", "2".asTerm, "4".asTerm),
+                Term.Fact("link", "1".asTerm, "3".asTerm),
+                Term.Fact("link", "3".asTerm, "4".asTerm),
+                Term.Rule("path", x, y, Term.Fact("c", x, Term.Fact("c", y, "nil".asTerm))) {
+                    Term.Fact("link", x, y)
+                },
+                Term.Rule("path", x, y, Term.Fact("c", x, w)) {
+                    Term.Fact("link", x, z) and Term.Fact("path", z, y, w)
+                }
+            )
+        )
         val query: Term = Term.Fact("path", "0".asTerm, "4".asTerm, Term.Var("nodes"))
         val answers = kb.ask(query).toList()
         // There should be two paths from 0 to 4.
@@ -147,10 +158,12 @@ class LogicKitTests {
         val mia: Term = "mia".asTerm
         val happy: Term = "happy".asTerm
         val who = Term.Var("who")
-        val kb = KnowledgeBase(listOf(
-            play[mia],
-            (play[mia] and play[mia]) implies happy[mia]
-        ))
+        val kb = KnowledgeBase(
+            listOf(
+                play[mia],
+                (play[mia] and play[mia]) implies happy[mia]
+            )
+        )
         val answers0 = kb.ask(happy[mia]).toList()
         assertEquals(answers0.size, 1)
         assertEquals(answers0[0], mapOf())

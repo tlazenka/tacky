@@ -259,5 +259,4 @@ class BuiltinsTests {
         assertEquals(Nat.asKotlinInt(Nat.from(5)), 5)
         assertNull(Nat.asKotlinInt(Nat.succ(Term.Var("?"))))
     }
-
 }
