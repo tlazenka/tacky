@@ -1,8 +1,8 @@
 package tacky
 
-fun<S> Collection<S>.concatenated(other: Collection<S>) = SequenceConcatenation(this, other)
+fun <S> Collection<S>.concatenated(other: Collection<S>) = SequenceConcatenation(this, other)
 
-data class SequenceConcatenation<S>(private val first: Collection<S>, private val second: Collection<S>): Iterator<S> {
+data class SequenceConcatenation<S>(private val first: Collection<S>, private val second: Collection<S>) : Iterator<S> {
     private var iter2: Iterator<S> = second.iterator()
     private var iter1: Iterator<S> = first.iterator()
 
@@ -21,7 +21,7 @@ data class SequenceConcatenation<S>(private val first: Collection<S>, private va
     }
 }
 
-interface SourcedIterator<T>: Iterator<T> {
+interface SourcedIterator<T> : Iterator<T> {
     fun poll(): T?
 
     var nextElement: T?
@@ -41,5 +41,4 @@ interface SourcedIterator<T>: Iterator<T> {
         nextElement = null
         return result!!
     }
-
 }

@@ -1,10 +1,10 @@
 package tacky
 
-class KnowledgeBase: Iterator<Term> {
-    /// The list of predicates in the knowledge base, grouped by functor.
+class KnowledgeBase : Iterator<Term> {
+    // / The list of predicates in the knowledge base, grouped by functor.
     var predicates: HashMap<String, MutableList<Term>> = hashMapOf()
         private set
-    /// The list of isolated literals in the knowledge base.
+    // / The list of isolated literals in the knowledge base.
     var literals: MutableSet<Term> = hashSetOf()
         private set
 
@@ -24,9 +24,9 @@ class KnowledgeBase: Iterator<Term> {
     }
 
     constructor(knowledge: kotlin.collections.List<Term>) {
-        /// Extract predicates and literals from the given list of terms.
+        // / Extract predicates and literals from the given list of terms.
         for (term in knowledge) {
-            when  {
+            when {
                 term is Term.TermInternal -> {
                     val name = term.name
                     val group = predicates[name] ?: mutableListOf()
@@ -52,8 +52,8 @@ class KnowledgeBase: Iterator<Term> {
 
     override fun next(): Term = iterator.next()
 
-    /// The number of predicates and literals in the knowledge base.
-    val count: Int get() = predicates.values.fold(0) { i, j ->  i + j.size } + literals.size
+    // / The number of predicates and literals in the knowledge base.
+    val count: Int get() = predicates.values.fold(0) { i, j -> i + j.size } + literals.size
 
     fun ask(query: Term, logger: Logger? = null): AnswerSet {
         when {
@@ -69,7 +69,7 @@ class KnowledgeBase: Iterator<Term> {
         }
     }
 
-    fun renaming(variables: Set<String>) : KnowledgeBase {
+    fun renaming(variables: Set<String>): KnowledgeBase {
         val result = KnowledgeBase(knowledge = listOf())
         for ((name, terms) in predicates) {
             result.predicates[name] = terms.map { it.renaming(variables) }.toMutableList()
@@ -78,7 +78,7 @@ class KnowledgeBase: Iterator<Term> {
         return result
     }
 
-    fun renameVariables(term: Term) : Term {
+    fun renameVariables(term: Term): Term {
         return when (term) {
             is Term.Var -> {
                 val name = term.value
@@ -92,7 +92,7 @@ class KnowledgeBase: Iterator<Term> {
         }
     }
 
-    operator fun plus(rhs: KnowledgeBase) : KnowledgeBase {
+    operator fun plus(rhs: KnowledgeBase): KnowledgeBase {
         val lhs = this
         val result = KnowledgeBase(knowledge = listOf())
         for (name in lhs.predicates.keys.concatenated(other = rhs.predicates.keys)) {

@@ -58,7 +58,7 @@ class BindingMapTests {
     @Test
     fun testMerged() {
         val bindingMap: BindingMap = mapOf("x" to Term.Var("y"))
-        assertEquals(bindingMap.merged(other = mapOf("y"  to Term.Var("z")))["y"], Term.Var("z"))
-        assertEquals(bindingMap.merged(other = mapOf("x"  to Term.Var("z")))["x"], Term.Var("z"))
+        assertEquals(bindingMap.merged(other = mapOf("y" to Term.Var("z")))["y"], Term.Var("z"))
+        assertEquals(bindingMap.merged(other = mapOf("x" to Term.Var("z")))["x"], Term.Var("z"))
     }
 }

@@ -1,14 +1,14 @@
 package tacky
 
-/// Base class for realizers.
-interface RealizerBase: SourcedIterator<Map<String, Term>>
+// / Base class for realizers.
+interface RealizerBase : SourcedIterator<Map<String, Term>>
 
-/// Realizer that alternatively pulls results from multiple sub-realizers.
+// / Realizer that alternatively pulls results from multiple sub-realizers.
 class RealizerAlternator(realizers: kotlin.collections.List<Realizer>) : RealizerBase {
     private var index = 0
     private var realizers = realizers.toMutableList()
 
-    override fun poll() : Map<String, Term>? {
+    override fun poll(): Map<String, Term>? {
         while (realizers.isNotEmpty()) {
             val result = realizers[index].poll()
             if (result == null) {
@@ -25,24 +25,23 @@ class RealizerAlternator(realizers: kotlin.collections.List<Realizer>) : Realize
     }
 
     override var nextElement: Map<String, Term>? = null
-
 }
 
-/// Standard goal realizer.
+// / Standard goal realizer.
 class Realizer(
-    /// The goals to realize.
+    // / The goals to realize.
     private val goals: kotlin.collections.List<Term>,
-    /// The knowledge base.
+    // / The knowledge base.
     private val knowledge: KnowledgeBase,
-    /// The bindings already  determined by the parent realizer.
+    // / The bindings already  determined by the parent realizer.
     private val parentBindings: BindingMap = mapOf(),
-    /// The optional logger, for debug purpose.
+    // / The optional logger, for debug purpose.
     private var logger: Logger? = null
 ) : RealizerBase {
 
-    /// An iterator on the knowledge clauses to check.
+    // / An iterator on the knowledge clauses to check.
     private var clauseIterator: Iterator<Term>? = null
-    /// The subrealizer, if any.
+    // / The subrealizer, if any.
     private var subRealizer: RealizerBase? = null
 
     init {
@@ -54,7 +53,7 @@ class Realizer(
         }
     }
 
-    override fun poll() : Map<String, Term>? {
+    override fun poll(): Map<String, Term>? {
         // If we have a subrealizer running, pull its results first.
         val sub = subRealizer
         if (sub != null) {
@@ -100,8 +99,7 @@ class Realizer(
                         return branchResult.merged(parentBindings)
                     }
                 }
-            }
-            else if ((goal is Term.TermInternal) && (clause is Term.TermInternal)) {
+            } else if ((goal is Term.TermInternal) && (clause is Term.TermInternal)) {
                 val nodeResult = unify(goal = goal, fact = clause)
                 if (nodeResult != null) {
                     if (goals.size > 1) {
@@ -115,8 +113,7 @@ class Realizer(
                         return nodeResult.merged(parentBindings)
                     }
                 }
-            }
-            else if ((goal is Term.TermInternal) && (clause is Term.RuleInternal)) {
+            } else if ((goal is Term.TermInternal) && (clause is Term.RuleInternal)) {
                 val goalName = goal.name
                 val ruleName = clause.name
                 val ruleArgs = clause.arguments
@@ -146,8 +143,7 @@ class Realizer(
                         return branchResult.merged(parentBindings)
                     }
                 }
-            }
-            else {
+            } else {
                 break
             }
         }
@@ -156,7 +152,7 @@ class Realizer(
 
     override var nextElement: Map<String, Term>? = null
 
-    fun unify(goal: Term, fact: Term, bindings: BindingMap = mapOf()) : BindingMap? {
+    fun unify(goal: Term, fact: Term, bindings: BindingMap = mapOf()): BindingMap? {
         // Shallow-walk the terms to unify.
         val lhs = bindings.shallowWalk(goal)
         val rhs = bindings.shallowWalk(fact)
@@ -211,12 +207,8 @@ class Realizer(
                         return intermediateResult
                     }
                 }
-
             }
             else -> return null
         }
-
     }
-
 }
-

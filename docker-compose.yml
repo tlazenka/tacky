@@ -9,6 +9,13 @@ services:
     command: gradle linuxTest 
     volumes_from:
      - caches
+  
+  format:
+    image: kkopper/ktlint:0.38.1
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: ktlint -F --verbose
 
   caches:
     image: centos:7

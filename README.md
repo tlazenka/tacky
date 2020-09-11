@@ -8,5 +8,4 @@ Exploring Kotlin DSLs via a port of [LogicKit](https://github.com/kyouko-taiga/L
 
 # Acknowledgements
 
-Dimitri Racordon and others listed in [LICENSE-THIRD-PARTY](LICENSE-THIRD-PARTY).
-
+Dimitri Racordon and others listed in the [LICENSE](LICENSE).

@@ -15,9 +15,9 @@ class ConjunctionDslBuilder() {
 
     var rhs: Term by Delegates.notNull()
 
-    fun withLhs(lhs: Term): ConjunctionDslBuilder = this.apply { this.lhs = lhs}
+    fun withLhs(lhs: Term): ConjunctionDslBuilder = this.apply { this.lhs = lhs }
 
-    fun withRhs(rhs: Term): ConjunctionDslBuilder = this.apply { this.rhs = rhs}
+    fun withRhs(rhs: Term): ConjunctionDslBuilder = this.apply { this.rhs = rhs }
 
     fun build(): Term.Conjunction = Term.Conjunction(lhs, rhs)
 }
@@ -29,9 +29,9 @@ class DisjunctionDslBuilder() {
 
     var rhs: Term by Delegates.notNull()
 
-    fun withLhs(lhs: Term): DisjunctionDslBuilder = this.apply { this.lhs = lhs}
+    fun withLhs(lhs: Term): DisjunctionDslBuilder = this.apply { this.lhs = lhs }
 
-    fun withRhs(rhs: Term): DisjunctionDslBuilder = this.apply { this.rhs = rhs}
+    fun withRhs(rhs: Term): DisjunctionDslBuilder = this.apply { this.rhs = rhs }
 
     fun build(): Term.Disjunction = Term.Disjunction(lhs, rhs)
 }
@@ -45,16 +45,15 @@ class RuleInternalDslBuilder() {
 
     var body: Term by Delegates.notNull()
 
-    fun withName(name: String): RuleInternalDslBuilder = this.apply { this.name = name}
+    fun withName(name: String): RuleInternalDslBuilder = this.apply { this.name = name }
 
     fun arguments(block: ArgumentsDslCollection.() -> Unit): RuleInternalDslBuilder = this.apply { this.arguments = ArgumentsDslCollection().apply { block() }.argumentsDslCollection }
 
-    fun withArguments(arguments: kotlin.collections.List<Term>): RuleInternalDslBuilder = this.apply { this.arguments = arguments}
+    fun withArguments(arguments: kotlin.collections.List<Term>): RuleInternalDslBuilder = this.apply { this.arguments = arguments }
 
-    fun withBody(body: Term): RuleInternalDslBuilder = this.apply { this.body = body}
+    fun withBody(body: Term): RuleInternalDslBuilder = this.apply { this.body = body }
 
     fun build(): Term = Term.RuleInternal(name, arguments, body)
-
 
     class ArgumentsDslCollection internal constructor() {
         internal val argumentsDslCollection: ArrayList<Term> = ArrayList()
@@ -72,14 +71,13 @@ class TermInternalDslBuilder() {
 
     var arguments: kotlin.collections.List<Term> = listOf()
 
-    fun withName(name: String): TermInternalDslBuilder = this.apply { this.name = name}
+    fun withName(name: String): TermInternalDslBuilder = this.apply { this.name = name }
 
     fun arguments(block: ArgumentsDslCollection.() -> Unit): TermInternalDslBuilder = this.apply { this.arguments = ArgumentsDslCollection().apply { block() }.argumentsDslCollection }
 
-    fun withArguments(arguments: kotlin.collections.List<Term>): TermInternalDslBuilder = this.apply { this.arguments = arguments}
+    fun withArguments(arguments: kotlin.collections.List<Term>): TermInternalDslBuilder = this.apply { this.arguments = arguments }
 
     fun build(): Term = Term.TermInternal(name, arguments)
-
 
     class ArgumentsDslCollection internal constructor() {
         internal val argumentsDslCollection: ArrayList<Term> = ArrayList()
@@ -99,7 +97,7 @@ fun `val`(block: ValDslBuilder.() -> Unit): Term.Val = ValDslBuilder().apply(blo
 class ValDslBuilder() {
     var value: Any by Delegates.notNull()
 
-    fun withValue(value: Any): ValDslBuilder = this.apply { this.value = value}
+    fun withValue(value: Any): ValDslBuilder = this.apply { this.value = value }
 
     fun build(): Term.Val = Term.Val(value)
 }
@@ -109,11 +107,10 @@ fun `var`(block: VarDslBuilder.() -> Unit): Term.Var = VarDslBuilder().apply(blo
 class VarDslBuilder() {
     var value: String by Delegates.notNull()
 
-    fun withValue(value: String): VarDslBuilder = this.apply { this.value = value}
+    fun withValue(value: String): VarDslBuilder = this.apply { this.value = value }
 
     fun build(): Term.Var = Term.Var(value)
 }
-
 
 fun knowledgeBase(block: KnowledgeBaseDslBuilder.() -> Unit): KnowledgeBase = KnowledgeBaseDslBuilder().apply(block).build()
 @TermDslMarker
@@ -122,7 +119,7 @@ class KnowledgeBaseDslBuilder() {
 
     fun knowledge(block: KnowledgeDslCollection.() -> Unit): KnowledgeBaseDslBuilder = this.apply { this.knowledge = KnowledgeDslCollection().apply { block() }.knowledgeDslCollection }
 
-    fun withKnowledge(knowledge: List<Term>): KnowledgeBaseDslBuilder = this.apply { this.knowledge = knowledge}
+    fun withKnowledge(knowledge: List<Term>): KnowledgeBaseDslBuilder = this.apply { this.knowledge = knowledge }
 
     fun build(): KnowledgeBase = KnowledgeBase(knowledge)
 
