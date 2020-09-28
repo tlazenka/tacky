@@ -1,6 +1,6 @@
 # Tacky
 
-Kotlin conversion of [LogicKit](https://github.com/kyouko-taiga/LogicKit).
+A Kotlin conversion of [LogicKit](https://github.com/kyouko-taiga/LogicKit).
 
 ## Testing
 
