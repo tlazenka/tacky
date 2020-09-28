@@ -15,7 +15,7 @@ services:
     volumes:
       - .:/app
     working_dir: /app
-    command: ktlint -F --verbose
+    command: ktlint -F
 
   caches:
     image: centos:7

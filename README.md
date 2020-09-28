@@ -1,8 +1,12 @@
 # Tacky
 
-Exploring Kotlin DSLs via a port of [LogicKit](https://github.com/kyouko-taiga/LogicKit).
+Kotlin conversion of [LogicKit](https://github.com/kyouko-taiga/LogicKit).
 
-## Run the tests
+## Testing
+
+`./gradlew --rerun-tasks allTest`
+
+_or_
 
 `docker-compose run --rm app ./gradlew --rerun-tasks allTest`
 
