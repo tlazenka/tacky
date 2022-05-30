@@ -7,68 +7,68 @@ object Nat {
     val zero: Term = Term.Lit("nat::0")
 
     fun succ(n: Term): Term {
-        Platform.assert(isNat(n), "'${n}' is not a builtin natural number")
+        if (!(isNat(n))) { throw AssertionError("'${n}' is not a builtin natural number") }
         return Term.Fact("nat::succ", n)
     }
 
     // MARK: Predicates
 
     fun greater(lhs: Term, rhs: Term): Term {
-        Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
-        Platform.assert(isNat(rhs), "'${rhs}' is not a builtin natural number")
+        if (!(isNat(lhs))) { throw AssertionError("'${lhs}' is not a builtin natural number") }
+        if (!(isNat(rhs))) { throw AssertionError("'${rhs}' is not a builtin natural number") }
         return Term.Fact("nat::>", lhs, rhs)
     }
 
     fun greaterOrEqual(lhs: Term, rhs: Term): Term {
-        Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
-        Platform.assert(isNat(rhs), "'${rhs}' is not a builtin natural number")
+        if (!(isNat(lhs))) { throw AssertionError("'${lhs}' is not a builtin natural number") }
+        if (!(isNat(rhs))) { throw AssertionError("'${rhs}' is not a builtin natural number") }
         return Term.Fact("nat::>=", lhs, rhs)
     }
 
     fun smaller(lhs: Term, rhs: Term): Term {
-        Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
-        Platform.assert(isNat(rhs), "'${rhs}' is not a builtin natural number")
+        if (!(isNat(lhs))) { throw AssertionError("'${lhs}' is not a builtin natural number") }
+        if (!(isNat(rhs))) { throw AssertionError("'${rhs}' is not a builtin natural number") }
         return Term.Fact("nat::<", lhs, rhs)
     }
 
     fun smallerOrEqual(lhs: Term, rhs: Term): Term {
-        Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
-        Platform.assert(isNat(rhs), "'${rhs}' is not a builtin natural number")
+        if (!(isNat(lhs))) { throw AssertionError("'${lhs}' is not a builtin natural number") }
+        if (!(isNat(rhs))) { throw AssertionError("'${rhs}' is not a builtin natural number") }
         return Term.Fact("nat::<=", lhs, rhs)
     }
 
     fun add(lhs: Term, rhs: Term, res: Term): Term {
-        Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
-        Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
-        Platform.assert(isNat(res), "'${res}' is not a builtin natural number")
+        if (!(isNat(lhs))) { throw AssertionError("'${lhs}' is not a builtin natural number") }
+        if (!(isNat(lhs))) { throw AssertionError("'${lhs}' is not a builtin natural number") }
+        if (!(isNat(res))) { throw AssertionError("'${res}' is not a builtin natural number") }
         return Term.Fact("nat::+", lhs, rhs, res)
     }
 
     fun sub(lhs: Term, rhs: Term, res: Term): Term {
-        Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
-        Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
-        Platform.assert(isNat(res), "'${res}' is not a builtin natural number")
+        if (!(isNat(lhs))) { throw AssertionError("'${lhs}' is not a builtin natural number") }
+        if (!(isNat(lhs))) { throw AssertionError("'${lhs}' is not a builtin natural number") }
+        if (!(isNat(res))) { throw AssertionError("'${res}' is not a builtin natural number") }
         return Term.Fact("nat::-", lhs, rhs, res)
     }
 
     fun mul(lhs: Term, rhs: Term, res: Term): Term {
-        Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
-        Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
-        Platform.assert(isNat(res), "'${res}' is not a builtin natural number")
+        if (!(isNat(lhs))) { throw AssertionError("'${lhs}' is not a builtin natural number") }
+        if (!(isNat(lhs))) { throw AssertionError("'${lhs}' is not a builtin natural number") }
+        if (!(isNat(res))) { throw AssertionError("'${res}' is not a builtin natural number") }
         return Term.Fact("nat::*", lhs, rhs, res)
     }
 
     fun div(lhs: Term, rhs: Term, res: Term): Term {
-        Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
-        Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
-        Platform.assert(isNat(res), "'${res}' is not a builtin natural number")
+        if (!(isNat(lhs))) { throw AssertionError("'${lhs}' is not a builtin natural number") }
+        if (!(isNat(lhs))) { throw AssertionError("'${lhs}' is not a builtin natural number") }
+        if (!(isNat(res))) { throw AssertionError("'${res}' is not a builtin natural number") }
         return Term.Fact("nat::/", lhs, rhs, res)
     }
 
     fun mod(lhs: Term, rhs: Term, res: Term): Term {
-        Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
-        Platform.assert(isNat(lhs), "'${lhs}' is not a builtin natural number")
-        Platform.assert(isNat(res), "'${res}' is not a builtin natural number")
+        if (!(isNat(lhs))) { throw AssertionError("'${lhs}' is not a builtin natural number") }
+        if (!(isNat(lhs))) { throw AssertionError("'${lhs}' is not a builtin natural number") }
+        if (!(isNat(res))) { throw AssertionError("'${res}' is not a builtin natural number") }
         return Term.Fact("nat::%", lhs, rhs, res)
     }
 
@@ -175,19 +175,19 @@ object List {
     // MARK: Predicates
 
     fun count(list: Term, count: Term): Term {
-        Platform.assert(isList(list), "'${list}' is not a builtin list")
+        if (!(isList(list))) { throw AssertionError("'${list}' is not a builtin list") }
         return Term.Fact("list::count", list, count)
     }
 
     fun contains(list: Term, element: Term): Term {
-        Platform.assert(isList(list), "'${list}' is not a builtin list")
+        if (!(isList(list))) { throw AssertionError("'${list}' is not a builtin list") }
         return Term.Fact("list::contains", list, element)
     }
 
     fun concat(lhs: Term, rhs: Term, res: Term): Term {
-        Platform.assert(isList(lhs), "'${lhs}' is not a builtin list")
-        Platform.assert(isList(rhs), "'${rhs}' is not a builtin list")
-        Platform.assert(isList(res), "'${res}' is not a builtin list")
+        if (!(isList(lhs))) { throw AssertionError("'${lhs}' is not a builtin list") }
+        if (!(isList(rhs))) { throw AssertionError("'${rhs}' is not a builtin list") }
+        if (!(isList(res))) { throw AssertionError("'${res}' is not a builtin list") }
         return Term.Fact("list::concat", lhs, rhs, res)
     }
 

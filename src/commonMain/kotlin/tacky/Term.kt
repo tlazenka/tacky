@@ -38,7 +38,7 @@ sealed class Term {
                 is Conjunction -> {
                     val lhs = dnf.lhs
                     val rhs = dnf.rhs
-                    Platform.assert((lhs.goals.size == 1) && (rhs.goals.size == 1))
+                    if (!(((lhs.goals.size == 1) && (rhs.goals.size == 1)))) { throw AssertionError() }
                     return listOf(lhs.goals[0] + rhs.goals[0])
                 }
                 is Disjunction -> {
