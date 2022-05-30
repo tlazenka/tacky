@@ -1,6 +1,6 @@
 # Tacky
 
-A Kotlin conversion of [LogicKit](https://github.com/kyouko-taiga/LogicKit).
+A Kotlin conversion of [LogicKit](https://github.com/kyouko-taiga/LogicKit). For use by, but not used in, [Astro Ledger](https://www.astroledger.org).
 
 ## Testing
 

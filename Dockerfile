@@ -1,4 +1,4 @@
-FROM gradle:6.6.1-jdk8
+FROM gradle:7.3.3-jdk8
 
 ENV APP_HOME /app
 WORKDIR $APP_HOME

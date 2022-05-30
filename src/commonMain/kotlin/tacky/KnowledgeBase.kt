@@ -62,7 +62,7 @@ class KnowledgeBase : Iterator<Term> {
                 // Build an array of realizers for each conjunction of goals in the query.
                 val realizers = query.goals.map { Realizer(goals = it, knowledge = renaming(query.variables), logger = logger) }
                 // Return the goal realizer(s).
-                Platform.assert(realizers.isNotEmpty())
+                if (!(realizers.isNotEmpty())) { throw AssertionError() }
                 val iterator = if (realizers.size > 1) RealizerAlternator(realizers = realizers) else realizers[0]
                 return AnswerSet(realizer = iterator, variables = query.variables)
             }

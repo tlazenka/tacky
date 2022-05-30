@@ -46,7 +46,7 @@ class Realizer(
 
     init {
         // Identify which part of the knowledge base the realizer should explore.
-        Platform.assert(goals.isNotEmpty())
+        if (!(goals.isNotEmpty())) { throw AssertionError() }
         when (val goal = goals.firstOrNull()!!) {
             is Term.TermInternal -> clauseIterator = knowledge.predicates[goal.name].let { it?.iterator() }
             is Term.RuleInternal -> clauseIterator = knowledge.predicates[goal.name].let { it?.iterator() }
@@ -71,7 +71,7 @@ class Realizer(
         // Check for the built-in `~=~/2` predicate.
         if ((goal is Term.TermInternal) && (goal.name == "lk.~=~")) {
             val args = goal.arguments
-            Platform.assert(args.size == 2)
+            if (!(args.size == 2)) { throw AssertionError() }
             val nodeResult = unify(goal = args[0], fact = args[1])
             if (nodeResult != null) {
                 if (goals.size > 1) {
@@ -118,7 +118,7 @@ class Realizer(
                 val ruleName = clause.name
                 val ruleArgs = clause.arguments
                 val ruleBody = clause.body
-                Platform.assert(goalName == ruleName)
+                if (!(goalName == ruleName)) { throw AssertionError() }
 
                 // First we try to unify the rule head with the goal.
                 val head: Term = Term.TermInternal(name = goalName, arguments = ruleArgs)
@@ -126,7 +126,7 @@ class Realizer(
                 if (nodeResult != null) {
                     val subGoals = goals.drop(1).map { nodeResult.deepWalk(it) }
                     val ruleGoals = ruleBody.goals.map { it.map { nodeResult.deepWalk(it) } + subGoals }
-                    Platform.assert(ruleGoals.isNotEmpty())
+                    if (!(ruleGoals.isNotEmpty())) { throw AssertionError() }
 
                     // We have to make sure bound knowledge variables are renamed in the sub-realizer's
                     // knowledge, otherwise they may collide with the ones we already bound. For instance,

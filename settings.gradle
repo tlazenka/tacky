@@ -1,4 +1,0 @@
-rootProject.name = 'tacky'
-
-
-enableFeaturePreview('GRADLE_METADATA')
